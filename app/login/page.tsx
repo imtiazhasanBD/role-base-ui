@@ -4,14 +4,15 @@ import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 
 export default function LoginPage() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
     signIn('credentials', {
-      username,
+      email,
       password,
       callbackUrl: '/',
+      redirect: false
     });
   };
 
@@ -19,8 +20,8 @@ export default function LoginPage() {
     <div className="flex flex-col items-center justify-center min-h-screen gap-4">
       <input
         className="border px-4 py-2"
-        placeholder="Username"
-        onChange={(e) => setUsername(e.target.value)}
+        placeholder="email"
+        onChange={(e) => setEmail(e.target.value)}
       />
       <input
         type="password"

@@ -7,18 +7,19 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text" },
+        email: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (!credentials) return null;
+console.log(credentials);
 
         try {
-          const res = await fetch("https://dummyjson.com/auth/login", {
+          const res = await fetch("https://api.escuelajs.co/api/v1/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              username: credentials.username,
+              email: credentials.email,
               password: credentials.password,
             }),
           });
@@ -26,14 +27,15 @@ export const authOptions: NextAuthOptions = {
           if (!res.ok) return null;
 
           const user = await res.json();
+          console.log("user:", user);
+          
 
           // Map API response to NextAuth user object
           return {
             id: String(user.id),
-            name: user.username,
             email: user.email ?? "",
-            token: user.token,
-            role: user.username === "emilys" ? "admin" : "user", // example role logic
+            token: user.access_token,
+            role: "admin"        //user.username === "emilys" ? "admin" : "user", // example role logic
           };
         } catch (error) {
           console.error("Login error:", error);
